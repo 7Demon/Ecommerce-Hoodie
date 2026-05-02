@@ -11,3 +11,6 @@ Route::get('/home', function () {
 Route::get('/about', function(){
     return view('about');
 });
+Route::get('/collections', function(){
+    return view('pages.collections');
+})->name('collections');

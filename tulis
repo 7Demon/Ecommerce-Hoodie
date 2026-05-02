@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e2e2e2",
+                        "background": "#f9f9f9",
+                        "outline-variant": "#d2c4bc",
+                        "surface-bright": "#f9f9f9",
+                        "tertiary-fixed": "#f4dfcb",
+                        "primary-fixed": "#fbddca",
+                        "surface": "#f9f9f9",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#a69482",
+                        "tertiary-fixed-dim": "#d7c3b0",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3131",
+                        "primary-container": "#3d2b1f",
+                        "on-secondary-container": "#656461",
+                        "primary-fixed-dim": "#dec1af",
+                        "on-primary-fixed-variant": "#574335",
+                        "on-primary-container": "#ac9181",
+                        "on-tertiary-fixed": "#241a0e",
+                        "tertiary": "#23180d",
+                        "inverse-primary": "#dec1af",
+                        "secondary-fixed": "#e5e2dd",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#392d20",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-low": "#f3f3f4",
+                        "on-primary-fixed": "#28180d",
+                        "outline": "#81756e",
+                        "on-surface-variant": "#4f453f",
+                        "surface-container": "#eeeeee",
+                        "surface-tint": "#705a4c",
+                        "primary": "#26170c",
+                        "secondary-fixed-dim": "#c9c6c2",
+                        "surface-dim": "#dadada",
+                        "on-secondary-fixed": "#1c1c19",
+                        "secondary": "#5f5e5b",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-tertiary-fixed-variant": "#524436",
+                        "secondary-container": "#e5e2dd",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#474743",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-high": "#e8e8e8",
+                        "on-background": "#1a1c1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "section-padding": "120px",
+                        "container-max": "1440px",
+                        "unit": "8px",
+                        "margin-mobile": "20px",
+                        "gutter": "32px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "h3": ["Noto Serif"],
+                        "h1": ["Noto Serif"],
+                        "body-md": ["Inter"],
+                        "h2": ["Noto Serif"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["0.75rem", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "h3": ["2rem", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "h1": ["4.5rem", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-md": ["1rem", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h2": ["3rem", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-lg": ["1.125rem", {"lineHeight": "1.7", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background antialiased">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/90 dark:bg-stone-950/90 backdrop-blur-md border-b border-stone-100 dark:border-stone-900 shadow-[0_40px_40px_-15px_rgba(61,43,31,0.04)]">
+<div class="flex justify-between items-center h-20 px-12 max-w-[1920px] mx-auto">
+<div class="text-2xl font-serif font-light tracking-[0.2em] text-stone-900 dark:text-stone-100">
+                ESTRELLA
+            </div>
+<div class="hidden md:flex gap-12 font-serif text-sm tracking-widest uppercase">
+<a class="text-stone-900 dark:white border-b border-stone-900 dark:border-white pb-1 transition-opacity duration-500 hover:opacity-80" href="#">Shop</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="#">Collections</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="#">About</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-6 text-stone-900 dark:text-stone-100">
+<button class="hover:opacity-80 transition-opacity duration-500">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button class="hover:opacity-80 transition-opacity duration-500">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative h-screen w-full flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Hero" class="w-full h-full object-cover" data-alt="A cinematic, high-resolution close-up of a premium, heavyweight chocolate brown cotton hoodie draped elegantly over a minimalist white pedestal. The lighting is soft and directional, casting subtle shadows that highlight the rich texture of the fabric and the precision of the stitching. The background is a clean, bright neutral cream tone, evoking a high-fashion editorial aesthetic. The overall mood is sophisticated, calm, and expensive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxj8VFK3YEPZUZDSsb0hgzyxz0ozUmgaTDVWMYidzEBHH3HNh389uoP9h_NWBSzxjXB76ONlX1z48lr2PvFuWEaFL_xC9wbfJd64Eu9h3yb9S5YelJe78Zv-4zup6tAFRKWO4Lk4zifjUvUvQr71FaO7ltkPNq35_AMddPBjuIx7fSG9HHEw8HFHgvXAYgovNgUkrkwE5EwWqlBosCxP8pjdqdF0t3LqdHOXp8wZYaJY1KTLXn_OQ1fvBa8ZZPVDqdpLUdZ6wqF6I"/>
+<div class="absolute inset-0 bg-black/5"></div>
+</div>
+<div class="relative z-10 px-12 max-w-7xl mx-auto w-full">
+<div class="max-w-2xl">
+<h1 class="font-h1 text-h1 text-primary mb-8">THE ART OF COMFORT</h1>
+<p class="font-body-lg text-body-lg text-secondary mb-12 max-w-lg">Experience the intersection of architectural structure and soft luxury. Our signature heavyweight hoodies are engineered for the modern aesthetician.</p>
+<button class="bg-primary-container text-on-primary px-10 py-5 font-label-caps text-label-caps rounded-lg hover:opacity-90 transition-all duration-300 shadow-xl">
+                        Explore Collection
+                    </button>
+</div>
+</div>
+</section>
+<!-- Featured Products -->
+<section class="py-32 px-12 max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-20">
+<div>
+<span class="font-label-caps text-label-caps text-on-tertiary-container mb-4 block">CURATED SELECTION</span>
+<h2 class="font-h2 text-h2 text-primary">Essential Silhouettes</h2>
+</div>
+<a class="font-label-caps text-label-caps border-b border-primary pb-1 text-primary" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Product 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
+<img alt="Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A minimalist product shot of a deep chocolate brown oversized hoodie against a soft tan background. The garment is shown from a three-quarter angle to emphasize the architectural volume of the hood and the drop-shoulder seam. Natural light filters in from a side window, creating high-contrast highlight and shadow. The aesthetic is clean, modern, and aligned with high-end luxury fashion branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBG4evhmmxxBlszSPKNStWJLwEnwag51SVcU51qAiPDi4cKEiO6llHul27yVMfJRg34tdlWYr_2IcHBFwFDi5pQXpBagOr0q0NSnJkFqy49UrMnOjs7QddJogOoh2qt8CVsv5Uz2hAnfb_BCWkTs6TPsUwcxOf_HBliZ6redfpB66PXcFAcQg5XdXnd0EKejm35vtx779I-_dtt6K-GogXRA8lB6ZZ_45n2vapPVAo8p1BH-YX5KfG0rocQMXicRjobPPUHoH9oAM"/>
+</div>
+<div class="text-center">
+<h3 class="font-h3 text-[1.25rem] mb-2 text-primary">The Archival Hoodie</h3>
+<p class="font-body-md text-secondary">$185.00</p>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
+<img alt="Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A premium sand-colored neutral hoodie displayed on a ghost mannequin, creating a floating effect against a crisp white gallery background. The fabric has a visible, high-quality knit texture. The lighting is bright and even, highlighting the soft curves of the garment. The image composition is perfectly centered, reflecting an orderly and upscale boutique presentation style with a focus on tactile quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2WJNy16xh12R4OxAom9ybXcSzVJ4_Klbxn_PTLCHIl8vMC1O9cv6Ad8eRZMbDxTPexkaIgA0K4c9OkKvt8nEVgQK3axfzDeSImwlZ31bG10AWy1PbHDrC02dI8tRxn-_mVwaAsJIBrFSxCooYKy1kBskzpOZv3blAVuqEZKWPsVhQXkMMeg5VSNnZWr_YZinX8ny86ovZ_C1p2BkNIXhaOaI8aeg-uYy8SxDsvPZvwlvOokWTljD8VRQhzrvPMR1HAncupJOfjVc"/>
+</div>
+<div class="text-center">
+<h3 class="font-h3 text-[1.25rem] mb-2 text-primary">Standard Fleece</h3>
+<p class="font-body-md text-secondary">$145.00</p>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
+<img alt="Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A close-up artistic shot of a charcoal grey premium hoodie's texture and silver metal aglets. The hoodie is neatly folded on a dark oak wooden surface. The mood is moody and atmospheric, using low-key lighting to accentuate the premium nature of the materials. The color palette is dominated by deep greys, warm browns, and sharp highlights on metallic details, maintaining a cohesive luxury visual identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhe8_7oH441QHx7NLv-rN31953LJdIadBhE5ZwQCq8hBmTI48RJiBeFEcaF59KkhMleK4vDazeIEfBEq-ZM8xRQJACVCjgXKCHvigeh4F2Y6wLAo6Y1i0DsDm4bQbLe1X2eVcfQmCXNJKBdIyKA5tOMHmQ1y3BBwYUER8tN5WhksdaJloW6ALPcCkCrB6ySzZeQL6rQ9amgNeOvStstwo5Mes1ICzt3vgtqAl4BZTuWkHEibb-hIWsezkHIoAFzcPOycZMVbrY8Wg"/>
+</div>
+<div class="text-center">
+<h3 class="font-h3 text-[1.25rem] mb-2 text-primary">Sculptural Wrap</h3>
+<p class="font-body-md text-secondary">$210.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Brand Story -->
+<section class="bg-primary-container py-32 px-12">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
+<div class="md:w-1/2">
+<img alt="Brand Story" class="w-full h-[600px] object-cover rounded-lg shadow-2xl" data-alt="A black and white high-fashion photography shot showing a designer's hands carefully tracing a pattern on a piece of heavy chocolate brown cotton fabric. The environment is a sun-drenched atelier with large industrial windows and minimalist wooden furniture. The focus is sharp on the texture of the fabric and the precision of the hands, conveying a sense of heritage, craftsmanship, and artisanal value in the apparel industry." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7svPiCGely8M0jrsyv43r1sf-ZbAP7oGab-rbncjT_qctsHcdSL_cw6tlBmgCtBqbWbh_ltj-gblipoQ06EDdnP-7jkoGUljhaGu2ARhGAwQRf78VAiMwPEtmw7_RRp3tYmgWj60o3ZEyKprDhqJ_Vkn8WqQG-K9hrTZqzRyZbeVByUOxeQZjgr1WNZnJPm_vkr4fytNnnGK0AG0gWqrLCJmLpESF1e6Br8NAex51iP3LZXjj2MP-QLvjsQcLwRqgo-GqcyHOuM4"/>
+</div>
+<div class="md:w-1/2 text-on-primary">
+<span class="font-label-caps text-label-caps text-on-primary-container mb-6 block uppercase tracking-[0.2em]">Our Heritage</span>
+<h2 class="font-h2 text-h2 mb-10 leading-tight">Crafted for the Discerning Eye.</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container mb-8 leading-relaxed">
+                        ESTRELLA was founded on the principle that the most personal garment in a wardrobe—the hoodie—deserved the same architectural rigor as a bespoke suit.
+                    </p>
+<p class="font-body-lg text-body-lg text-on-primary-container mb-12 leading-relaxed">
+                        Each piece is constructed from 500GSM organic cotton, harvested sustainably and dyed using custom-developed chocolate and cream pigments. We believe in slow fashion, where every stitch is an intentional step toward longevity.
+                    </p>
+<button class="border border-on-primary-container text-on-primary px-10 py-4 font-label-caps text-label-caps rounded-lg hover:bg-white/10 transition-colors">
+                        Learn More
+                    </button>
+</div>
+</div>
+</section>
+<!-- Collections Teaser -->
+<section class="py-32 px-12 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="relative h-[500px] group overflow-hidden cursor-pointer">
+<img alt="Collection" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" data-alt="A wide-angle lifestyle shot of a model wearing an oversized cream hoodie, standing in a vast, empty concrete architectural space. The lighting is dramatic, with a single beam of light illuminating the subject from above. The color story is monochromatic cream and grey, punctuated by the deep chocolate tones of the brand's identity. The image is clean, powerful, and emphasizes the garment's sculptural silhouette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGK7qqSM7vU6CnD8cQgQ3FjIwOMWxYTo9QpMU3tqiBYl4dWUFv9o-LQqgJmnl1ejY-Blq-_Ex2mLaSJ5q_Op_wykIEBmjZSr0tTyBe6uQ8RUXnspNfsbODn5rzGguGNlE3i8u7YFoC1cHFM2x0fcSS65zQLy7Imz14WRSzQFM7ujx6C_g_-5L6VnDxYWr9kkQeO-olmEdn0E987nRdFEzZrQGd-J0pjJdyD5cbecj20BF3-UCm4N8vP_5PdQ8fFDXsybY9mG6GrKI"/>
+<div class="absolute inset-0 bg-black/20 flex flex-col justify-center items-center text-white">
+<h3 class="font-h2 text-h2 mb-4">Summer Knits</h3>
+<p class="font-label-caps text-label-caps tracking-widest border-b border-white pb-1">Shop Now</p>
+</div>
+</div>
+<div class="relative h-[500px] group overflow-hidden cursor-pointer">
+<img alt="Collection" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" data-alt="A close-up editorial shot of multiple chocolate brown hoodies hanging on a sleek brass rail in a minimalist boutique setting. The background is a soft, textured plaster wall in a warm tan color. The composition focuses on the repetition of forms and the luxurious consistency of the brand's color palette. The soft, ambient lighting highlights the premium quality of the heavy cotton fabric." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyxwHfVmQeaJ-OfF4FHz_LMb56VFw3wjqzslR6_7qVBFu1QByVGBCILDb7ZaGF4AsJ_Z-Di_K7Ojt9zO4t3OPlOe0OjtH2jHfYSgm6OfxvxDPTJ0o8u-e7NOjJUAjTxgzjxp0xMRy3a4mAUjRxbB8OHHuQubmXYKUOQ7rdqNPbBFJTQmIy0PY6Rvf1EX7Q9f0z6XVKbNqwIUWpbtivClIvo84l-E4MXg4zt5BlYGWuRhrCc_rq6TRQ296yGCZLMB1fHdTW3HppYZc"/>
+<div class="absolute inset-0 bg-black/20 flex flex-col justify-center items-center text-white">
+<h3 class="font-h2 text-h2 mb-4">Core Essentials</h3>
+<p class="font-label-caps text-label-caps tracking-widest border-b border-white pb-1">Shop Now</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-20 px-12 mt-32 bg-stone-50 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div>
+<div class="text-xl font-serif tracking-widest text-stone-900 dark:text-stone-100 mb-8 uppercase">
+                    ESTRELLA
+                </div>
+<p class="font-serif text-xs tracking-wider text-stone-500 leading-relaxed max-w-xs">
+                    Elevating the everyday through architectural design and uncompromising material quality.
+                </p>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-stone-900 mb-6 uppercase">Assistance</h4>
+<div class="flex flex-col gap-4 font-serif text-xs tracking-wider">
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Shipping</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Returns</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Contact Us</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Size Guide</a>
+</div>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-stone-900 mb-6 uppercase">Company</h4>
+<div class="flex flex-col gap-4 font-serif text-xs tracking-wider">
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300 underline underline-offset-4" href="#">Sustainability</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Privacy Policy</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Terms</a>
+<a class="text-stone-500 hover:text-stone-900 transition-colors duration-300" href="#">Our Story</a>
+</div>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-stone-900 mb-6 uppercase">Newsletter</h4>
+<p class="font-serif text-xs tracking-wider text-stone-500 mb-6">Join our list for exclusive releases and editorial updates.</p>
+<div class="flex border-b border-stone-300 pb-2">
+<input class="bg-transparent border-none p-0 w-full font-serif text-xs tracking-wider focus:ring-0 placeholder-stone-400" placeholder="EMAIL ADDRESS" type="email"/>
+<button class="material-symbols-outlined text-stone-900" data-icon="arrow_forward">arrow_forward</button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-stone-200 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="font-serif text-xs tracking-wider text-stone-400">© 2024 ESTRELLA BOUTIQUE. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-8 items-center">
+<span class="material-symbols-outlined text-stone-400" data-icon="facebook">social_leaderboard</span>
+<span class="material-symbols-outlined text-stone-400" data-icon="instagram">retweet</span>
+</div>
+</div>
+</footer>
+</body></html>

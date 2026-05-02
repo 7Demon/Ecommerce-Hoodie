@@ -3,7 +3,7 @@
         <div class="text-2xl font-serif font-light tracking-[0.2em] text-stone-900 dark:text-stone-100">ESTRELLA</div>
         <div class="hidden md:flex gap-12 font-serif text-sm tracking-widest uppercase">
             <a class="text-stone-900 dark:white border-b border-stone-900 dark:border-white pb-1 transition-opacity duration-500 hover:opacity-80" href="#">Shop</a>
-            <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="#">Collections</a>
+            <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="{{ route('collections') }}">Collections</a>
             <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="#">About</a>
             <a class="text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors duration-300" href="#">Contact</a>
         </div>

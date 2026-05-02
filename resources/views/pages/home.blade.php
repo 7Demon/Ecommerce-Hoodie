@@ -1,10 +1,7 @@
-<!-- Menggunakan layout utama yang tadi kita buat -->
 @extends('layouts.app')
 
-<!-- Mengubah title halaman (opsional, karena di app.blade.php kita buat defaultnya) -->
 @section('title', 'Home - Estrella Boutique')
 
-<!-- Mengisi bagian @yield('content') -->
 @section('content')
 <main>
     <!-- Hero Section -->
