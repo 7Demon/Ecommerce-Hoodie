@@ -105,14 +105,29 @@
 <body class="bg-background text-on-background antialiased">
 
     <!-- Memanggil komponen Navbar -->
-    @include('partials.navbar')
+   
+    @if (request()->routeIs('admin'))
+        <div class="flex min-h-screen"> 
+            <aside>
+                @include('partials.sidebar')
+            </aside>
 
-    <main>
-     @yield('content')
-    </main>
+            <main>
+                @yield('content')
+            </main>
+        </div>
+    @else
+        @include('partials.navbar')
+        <main>
+            @yield('content')
+        </main>
+        @include('partials.footer')
+    @endif
+
+    
 
 
-    @include('partials.footer')
+    
 
 </body>
 </html>

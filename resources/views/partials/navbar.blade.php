@@ -9,7 +9,9 @@
         </div>
         <div class="flex items-center gap-6 text-stone-900 dark:text-stone-100">
             <button class="hover:opacity-80 transition-opacity duration-500">
-                <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                <a href="{{ route('shopping-cart') }}">
+                    <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                </a>
             </button>
             <button class="hover:opacity-80 transition-opacity duration-500">
                 <span class="material-symbols-outlined" data-icon="person">person</span>
