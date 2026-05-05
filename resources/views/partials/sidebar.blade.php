@@ -1,4 +1,4 @@
-<aside class="w-64 bg-surface-container-low border-r border-surface-variant flex flex-col md:flex flex-shrink-0">
+<aside class="hidden w-64 shrink-0 flex-col border-r border-surface-variant bg-surface-container-low md:flex">
     <div class="p-6">
         <h1 class="font-display-lg text-display-lg text-primary tracking-[0.2em]">LUXE</h1>
         <p class="font-label-sm text-label-sm text-on-surface-variant mt-2">ADMINISTRATION</p>

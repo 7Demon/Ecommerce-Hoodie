@@ -3,7 +3,7 @@
 @section('content')
 <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
 <!-- Header -->
-    <header class="bg-surface px-8 py-6 flex items-center justify-between border-b border-surface-variant">
+    <header class="bg-surface px-5 py-5 sm:px-8 sm:py-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-surface-variant">
         <div>
             <h2 class="font-headline-md text-headline-md text-on-surface">Manage Products</h2>
             <p class="font-body-md text-body-md text-on-surface-variant mt-1">View, edit, and manage your inventory.</p>
@@ -14,14 +14,14 @@
         </button>
     </header>
     <!-- Content Canvas -->
-    <div class="flex-1 overflow-auto p-8 bg-background">
+    <div class="flex-1 overflow-auto bg-background p-5 sm:p-8">
         <!-- Filters & Search Bar (Minimalist) -->
-        <div class="flex justify-between items-center mb-8 gap-4">
+        <div class="mb-8 flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div class="relative w-full max-w-md">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
                 <input class="w-full bg-surface-container-low border-b border-outline-variant px-10 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:bg-surface transition-colors placeholder:text-on-surface-variant/50" placeholder="Search products..." type="text"/>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-wrap gap-4">
                 <button class="px-4 py-2 border border-outline-variant rounded flex items-center gap-2 text-on-surface hover:bg-surface-container transition-colors">
                     <span class="material-symbols-outlined text-[20px]">filter_list</span>
                     <span class="font-label-md text-label-md">Filter</span>
@@ -34,7 +34,8 @@
         </div>
         <!-- Data Table (Glassmorphism/Card style) -->
         <div class="bg-surface rounded shadow-[0_20px_40px_rgba(62,39,35,0.03)] overflow-hidden">
-            <table class="w-full text-left border-collapse">
+            <div class="overflow-x-auto">
+            <table class="w-full min-w-[900px] text-left border-collapse">
                 <thead>
                     <tr class="border-b border-surface-variant bg-surface-container-low/50">
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant w-16">Image</th>
@@ -63,7 +64,7 @@
                         </td>
                         <td class="px-6 py-4 font-body-md text-body-md text-on-surface">$185.00</td>
                         <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="flex items-center justify-end gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
                                 <button class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary-container/20 rounded transition-colors" title="Edit">
                                     <span class="material-symbols-outlined text-[20px]">edit</span>
                                 </button>
@@ -75,10 +76,11 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
             <!-- Pagination -->
-            <div class="px-6 py-4 border-t border-surface-variant bg-surface-container-low/30 flex items-center justify-between">
+            <div class="px-6 py-4 border-t border-surface-variant bg-surface-container-low/30 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <span class="font-label-md text-label-md text-on-surface-variant">Showing 1 to 4 of 24 entries</span>
-                <div class="flex gap-1">
+                <div class="flex flex-wrap gap-1">
                     <button class="px-3 py-1 rounded text-on-surface-variant hover:bg-surface-container transition-colors font-label-md text-label-md disabled:opacity-50" disabled="">Prev</button>
                     <button class="px-3 py-1 rounded bg-primary text-on-primary font-label-md text-label-md">1</button>
                     <button class="px-3 py-1 rounded text-on-surface-variant hover:bg-surface-container transition-colors font-label-md text-label-md">2</button>
