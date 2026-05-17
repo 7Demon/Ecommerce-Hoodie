@@ -39,7 +39,7 @@ class ProductsController extends Controller
             'size' => ['required', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
-            'reserved_stock' => ['required', 'integer', 'min:0'],
+            'reserved_stock' => ['nullable', 'integer', 'min:0'],
         ]);
         $imagePath = $request->file('image');
         $imageName = uniqid() . '.' . $imagePath->extension();
@@ -81,7 +81,7 @@ class ProductsController extends Controller
             'size' => ['required', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
-            'reserved_stock' => ['required', 'integer', 'min:0'],
+            'reserved_stock' => ['nullable', 'integer', 'min:0'],
         ]);
         if ($request->hasFile('image')) {
             $oldImagePath = public_path($products->image);

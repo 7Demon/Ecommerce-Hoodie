@@ -9,7 +9,7 @@
             </button>
         </div>
 
-        <form action="{{ route('admin.products.store') }}" method="POST">
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-semibold text-stone-700 mb-1">Product Name</label>
@@ -32,7 +32,11 @@
                     <input type="number" name="stock" required class="w-full border border-stone-300 rounded-lg p-2.5 focus:border-stone-900 focus:ring-1 focus:ring-stone-900 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-stone-700 mb-1">Initial Stock</label>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Reserved Stock</label>
+                    <input type="number" name="reserved_stock"  class="w-full border border-stone-300 rounded-lg p-2.5 focus:border-stone-900 focus:ring-1 focus:ring-stone-900 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-stone-700 mb-1">Product Image</label>
                     <input type="file" name="image" required class="w-full border border-stone-300 rounded-lg p-2.5 focus:border-stone-900 focus:ring-1 focus:ring-stone-900 outline-none">
                 </div>
             </div>

@@ -36,12 +36,14 @@
         <!-- Data Table (Glassmorphism/Card style) -->
         <div class="bg-surface rounded shadow-[0_20px_40px_rgba(62,39,35,0.03)] overflow-hidden">
             <div class="overflow-x-auto">
-            <table class="w-full min-w-[900px] text-left border-collapse">
+            <table class="w-full min-w-225 text-left border-collapse">
                 <thead>
                     <tr class="border-b border-surface-variant bg-surface-container-low/50">
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant w-16">Image</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Product Name</th>
+                        <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Size</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Stock Level</th>
+                        <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Reserved Stock</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Price</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant text-right">Actions</th>
                     </tr>
@@ -51,10 +53,10 @@
                 @forelse ($products as $product)
                     <tr class="hover:bg-surface-container-lowest transition-colors group">
                         <td class="px-6 py-4">
-                            <img alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded bg-surface-variant" data-alt="Minimalist organic cotton hoodie in warm cream color, flat lay on light background" src="{$product->image}"/>
+                            <img alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded bg-surface-variant" data-alt="Minimalist organic cotton hoodie in warm cream color, flat lay on light background" src="{{ $product->image }}"/>
                         </td>
                         <td>{{ $product->name }}</td>
-                        <td>{{ $product->Size }}</td>
+                        <td>{{ $product->size }}</td>
                         <td>{{ $product->stock }}</td>
                         <td>{{ $product->reserved_stock }}</td>
                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
