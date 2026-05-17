@@ -15,5 +15,8 @@
         "postcss": "^8.5.14",
         "tailwindcss": "^4.2.4",
         "vite": "^7.0.7"
+    },
+    "dependencies": {
+        "material-symbols": "^0.44.8"
     }
 }

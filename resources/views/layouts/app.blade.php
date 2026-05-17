@@ -21,6 +21,7 @@
             <main class="flex-1 min-w-0">
                 @yield('content')
             </main>
+            @stack('scripts')
         </div>
     @else
         @include('partials.navbar')

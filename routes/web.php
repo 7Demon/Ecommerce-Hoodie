@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductsController;
 
 
 Route::get('/', function () {
@@ -15,9 +16,11 @@ Route::get('/collections', function(){
 Route::get('/shopping-cart', function(){
     return view('pages.shoppingCart');
 })->name('shopping-cart');
-Route::get('/admin', function(){
-    return view('pages.admin');
-})->name('admin');
 Route::get('/details', function(){
     return view('pages.productDetail');
 })->name('details');
+    
+Route::get('/admin', [ProductsController::class, 'index'])->name('admin');
+Route::post('/admin/products/add', [ProductsController::class, 'store'])->name('admin.products.store');
+Route::put('/admin/products/{products}', [ProductsController::class, 'update'])->name('admin.products.update');
+Route::delete('/admin/products/{products}', [ProductsController::class, 'destroy'])->name('admin.products.destroy');

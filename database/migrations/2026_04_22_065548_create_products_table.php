@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->string('Size');
+            $table->string('image')->nullable();
+            $table->string('size');
             $table->integer('stock');
             $table->decimal('price', 8, 2);
             $table->integer('reserved_stock')->default(0);

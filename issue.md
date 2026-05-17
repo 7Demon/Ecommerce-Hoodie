@@ -10,7 +10,31 @@ Membuat section product di admin memakai pola MVC Laravel:
 - `View`: `resources/views/pages/admin.blade.php`
 - `Route`: `routes/web.php`
 
-Hasil akhir: halaman `/admin` menampilkan data dari tabel `products`, form tambah/edit product menyimpan ke database, gambar product bisa di-upload, dan tombol delete menghapus product.
+Hasil akhir: halaman `/admin` menampilkan data dari tabel `products`, form tambah/edit product menyimpan ke database, gambar product diupload ke `public/images`, database hanya menyimpan URL/path gambar, dan tombol delete menghapus product.
+
+## Keputusan Teknis Gambar
+
+Product perlu gambar, tetapi database hanya menyimpan URL/path publik gambar.
+
+Artinya:
+
+- File gambar disimpan di folder `public/images`.
+- Database tidak menyimpan binary/base64 gambar.
+- Database hanya menyimpan nilai seperti `/images/hoodie-123.jpg`.
+- Tidak menyimpan file gambar di `storage/app/public`.
+- Tidak memakai `Storage::disk('public')`.
+- Tidak perlu `php artisan storage:link`.
+- Form create dan update harus memakai `enctype="multipart/form-data"`.
+- Field gambar di database bernama `image_url`.
+- Form admin menerima file gambar lewat input `name="image"`.
+
+Alur gambar:
+
+1. User memilih file gambar di form admin.
+2. Controller memvalidasi file gambar.
+3. Controller memindahkan file ke `public/images`.
+4. Controller menyimpan URL/path publik ke kolom `products.image_url`.
+5. View menampilkan gambar memakai nilai `image_url`.
 
 ## Kondisi Repo Saat Ini
 
@@ -36,7 +60,9 @@ reserved_stock
 Catatan penting:
 
 - Jangan pakai model `Products`, karena file model yang ada adalah `Product`.
-- Product perlu gambar, jadi tambahkan kolom `image` ke tabel `products` sebelum view memakai `$product->image`.
+- Tambahkan kolom `image_url` ke tabel `products` sebelum view memakai `$product->image_url`.
+- Jangan simpan file gambar ke database.
+- Jangan pakai kolom `image` di database; pakai `image_url`.
 - Jangan pakai kolom `category` di view admin sebelum kolom itu benar-benar ada di migration.
 - Kolom `Size` memakai huruf besar `S`, jadi controller dan view harus memakai key `Size` agar cocok dengan migration saat ini.
 
@@ -49,13 +75,16 @@ Yang harus dibuat:
 - Membuat route untuk `store`, `update`, dan `destroy`.
 - Mengubah `admin.blade.php` agar memakai data `$products` dari controller.
 - Menambahkan form tambah dan edit sederhana di halaman admin.
-- Menambahkan upload gambar product.
-- Menampilkan gambar product di tabel admin.
+- Menambahkan input upload gambar product.
+- Menyimpan file gambar ke `public/images`.
+- Menyimpan URL/path gambar ke kolom `image_url`.
+- Menampilkan gambar product dari `image_url` di tabel admin.
 - Menampilkan validasi error dan flash message sederhana.
 
 Yang tidak dikerjakan di issue ini:
 
 - Login admin.
+- Integrasi Cloudinary, S3, atau layanan upload eksternal.
 - Category product.
 - Product variant.
 - Checkout/cart.
@@ -80,7 +109,7 @@ use App\Models\Product;
 
 Semua type-hint `Products $products` juga harus diganti menjadi `Product $product`.
 
-### 2. Tambahkan Kolom Image ke Tabel Products
+### 2. Tambahkan Kolom Image URL ke Tabel Products
 
 File migration yang sudah ada:
 
@@ -89,7 +118,7 @@ File migration yang sudah ada:
 Jika project masih baru dan migration belum pernah dijalankan di database lokal, tambahkan kolom ini langsung ke migration `create_products_table`:
 
 ```php
-$table->string('image')->nullable();
+$table->string('image_url')->nullable();
 ```
 
 Letakkan setelah `description` atau sebelum `Size`:
@@ -97,7 +126,7 @@ Letakkan setelah `description` atau sebelum `Size`:
 ```php
 $table->string('name');
 $table->text('description');
-$table->string('image')->nullable();
+$table->string('image_url')->nullable();
 $table->string('Size');
 $table->integer('stock');
 $table->decimal('price', 8, 2);
@@ -107,7 +136,7 @@ $table->integer('reserved_stock')->default(0);
 Jika migration sudah pernah dijalankan, jangan edit migration lama. Buat migration baru:
 
 ```bash
-php artisan make:migration add_image_to_products_table --table=products
+php artisan make:migration add_image_url_to_products_table --table=products
 ```
 
 Isi migration baru:
@@ -116,29 +145,43 @@ Isi migration baru:
 public function up(): void
 {
     Schema::table('products', function (Blueprint $table) {
-        $table->string('image')->nullable()->after('description');
+        $table->string('image_url')->nullable()->after('description');
     });
 }
 
 public function down(): void
 {
     Schema::table('products', function (Blueprint $table) {
-        $table->dropColumn('image');
+        $table->dropColumn('image_url');
     });
 }
 ```
 
-### 3. Isi Method Controller
+### 3. Pastikan Folder Upload Ada
+
+Folder tujuan upload:
+
+```text
+public/images
+```
+
+Jika folder belum ada, buat folder ini:
+
+```bash
+mkdir public/images
+```
+
+File gambar akan bisa diakses publik lewat URL:
+
+```text
+/images/nama-file.jpg
+```
+
+### 4. Isi Method Controller
 
 File: `app/Http/Controllers/ProductsController.php`
 
 Method yang perlu diisi:
-
-Tambahkan import `Storage`:
-
-```php
-use Illuminate\Support\Facades\Storage;
-```
 
 ```php
 public function index()
@@ -162,8 +205,13 @@ public function store(Request $request)
         'reserved_stock' => ['nullable', 'integer', 'min:0'],
     ]);
 
+    $image = $request->file('image');
+    $imageName = uniqid('product_', true) . '.' . $image->extension();
+    $image->move(public_path('images'), $imageName);
+
+    unset($validated['image']);
+    $validated['image_url'] = '/images/' . $imageName;
     $validated['reserved_stock'] = $validated['reserved_stock'] ?? 0;
-    $validated['image'] = $request->file('image')->store('products', 'public');
 
     Product::create($validated);
 
@@ -184,15 +232,22 @@ public function update(Request $request, Product $product)
         'reserved_stock' => ['nullable', 'integer', 'min:0'],
     ]);
 
-    $validated['reserved_stock'] = $validated['reserved_stock'] ?? 0;
-
     if ($request->hasFile('image')) {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        $oldImagePath = public_path(ltrim($product->image_url, '/'));
+
+        if (is_file($oldImagePath)) {
+            unlink($oldImagePath);
         }
 
-        $validated['image'] = $request->file('image')->store('products', 'public');
+        $image = $request->file('image');
+        $imageName = uniqid('product_', true) . '.' . $image->extension();
+        $image->move(public_path('images'), $imageName);
+
+        $validated['image_url'] = '/images/' . $imageName;
     }
+
+    unset($validated['image']);
+    $validated['reserved_stock'] = $validated['reserved_stock'] ?? 0;
 
     $product->update($validated);
 
@@ -203,8 +258,10 @@ public function update(Request $request, Product $product)
 ```php
 public function destroy(Product $product)
 {
-    if ($product->image) {
-        Storage::disk('public')->delete($product->image);
+    $imagePath = public_path(ltrim($product->image_url, '/'));
+
+    if (is_file($imagePath)) {
+        unlink($imagePath);
     }
 
     $product->delete();
@@ -215,17 +272,17 @@ public function destroy(Product $product)
 
 Method `create`, `show`, dan `edit` boleh dibiarkan kosong dulu jika form dibuat langsung di `admin.blade.php`.
 
-### 4. Pastikan Product Model Bisa Mass Assignment
+### 5. Pastikan Product Model Bisa Mass Assignment
 
 File: `app/Models/Product.php`
 
-Pastikan `$fillable` tetap berisi kolom sesuai migration:
+Pastikan `$fillable` berisi kolom sesuai migration:
 
 ```php
 protected $fillable = [
     'name',
     'description',
-    'image',
+    'image_url',
     'Size',
     'stock',
     'price',
@@ -235,7 +292,7 @@ protected $fillable = [
 
 Jangan ubah `Size` menjadi `size` kecuali migration juga diubah.
 
-### 5. Ubah Route Admin
+### 6. Ubah Route Admin
 
 File: `routes/web.php`
 
@@ -261,7 +318,7 @@ Route::delete('/admin/products/{product}', [ProductsController::class, 'destroy'
 
 Route model binding `{product}` akan memakai model `Product` pada parameter controller `Product $product`.
 
-### 6. Ubah Admin View Agar Memakai Data Database
+### 7. Ubah Admin View Agar Memakai Data Database
 
 File: `resources/views/pages/admin.blade.php`
 
@@ -271,11 +328,7 @@ Bagian tabel jangan lagi memakai row statis. Gunakan loop:
 @forelse ($products as $product)
     <tr>
         <td>
-            @if ($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded">
-            @else
-                <span>No image</span>
-            @endif
+            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded">
         </td>
         <td>{{ $product->name }}</td>
         <td>{{ $product->Size }}</td>
@@ -309,7 +362,7 @@ Hapus atau tunda kolom berikut karena belum ada di migration:
 
 - Category
 
-### 7. Tambahkan Form Tambah Product di Admin View
+### 8. Tambahkan Form Tambah Product di Admin View
 
 File: `resources/views/pages/admin.blade.php`
 
@@ -333,7 +386,7 @@ Form tambah product:
 
 Letakkan form ini di atas tabel atau di modal sederhana.
 
-### 8. Tambahkan Form Edit Product
+### 9. Tambahkan Form Edit Product
 
 File: `resources/views/pages/admin.blade.php`
 
@@ -346,6 +399,7 @@ Untuk implementasi paling sederhana, buat form edit per row atau section edit ke
 
     <input name="name" value="{{ old('name', $product->name) }}" required>
     <textarea name="description" required>{{ old('description', $product->description) }}</textarea>
+    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded">
     <input name="image" type="file" accept="image/jpeg,image/png,image/webp">
     <input name="Size" value="{{ old('Size', $product->Size) }}" required>
     <input name="stock" type="number" min="0" value="{{ old('stock', $product->stock) }}" required>
@@ -358,13 +412,7 @@ Untuk implementasi paling sederhana, buat form edit per row atau section edit ke
 
 Jika ingin lebih rapi, edit form bisa dibuat sebagai modal atau halaman terpisah pada issue lanjutan.
 
-Catatan edit gambar:
-
-- Field `image` di form edit boleh kosong.
-- Jika kosong, gambar lama tetap dipakai.
-- Jika diisi, gambar lama dihapus dari storage lalu diganti gambar baru.
-
-### 9. Tambahkan Tombol Delete Product
+### 10. Tambahkan Tombol Delete Product
 
 File: `resources/views/pages/admin.blade.php`
 
@@ -377,7 +425,7 @@ File: `resources/views/pages/admin.blade.php`
 </form>
 ```
 
-### 10. Tambahkan Flash Message dan Error Message
+### 11. Tambahkan Flash Message dan Error Message
 
 File: `resources/views/pages/admin.blade.php`
 
@@ -399,7 +447,7 @@ Di bagian atas content:
 @endif
 ```
 
-### 11. Pagination
+### 12. Pagination
 
 File: `resources/views/pages/admin.blade.php`
 
@@ -411,37 +459,20 @@ Karena controller memakai `paginate(10)`, tambahkan pagination setelah tabel:
 
 Jika style pagination belum muncul benar, itu bisa dirapikan pada issue terpisah.
 
-### 12. Aktifkan Public Storage Link
-
-Upload gambar disimpan ke disk `public`, jadi project perlu symbolic link dari `public/storage` ke `storage/app/public`.
-
-Jalankan:
-
-```bash
-php artisan storage:link
-```
-
-Gambar ditampilkan dengan:
-
-```blade
-{{ asset('storage/' . $product->image) }}
-```
-
 ## Urutan Kerja Aman
 
 1. Perbaiki `ProductsController` agar memakai `App\Models\Product`.
-2. Tambahkan kolom `image` ke tabel `products`.
-3. Tambahkan `image` ke `$fillable` model `Product`.
+2. Tambahkan kolom `image_url` ke tabel `products`.
+3. Tambahkan `image_url` ke `$fillable` model `Product`.
 4. Isi method `index`, `store`, `update`, dan `destroy`.
 5. Ubah route `/admin` agar masuk ke `ProductsController@index`.
 6. Tambahkan route `POST`, `PUT`, dan `DELETE` untuk product.
 7. Ubah tabel `admin.blade.php` dari data statis menjadi `@forelse ($products as $product)`.
-8. Tambahkan form create product dengan `enctype="multipart/form-data"`.
-9. Tambahkan form update product dengan input file optional.
+8. Tambahkan form create product dengan input file `image`.
+9. Tambahkan form update product dengan input file `image` opsional.
 10. Tambahkan form delete product.
 11. Jalankan migration.
-12. Jalankan `php artisan storage:link`.
-13. Test manual di browser.
+12. Test manual di browser.
 
 ## Perintah Verifikasi
 
@@ -449,12 +480,6 @@ Jalankan migration:
 
 ```bash
 php artisan migrate
-```
-
-Aktifkan storage link:
-
-```bash
-php artisan storage:link
 ```
 
 Cek route:
@@ -475,15 +500,12 @@ DELETE  /admin/products/{product}
 Test manual:
 
 1. Buka `/admin`.
-2. Tambahkan product baru.
-3. Upload gambar product.
-4. Pastikan product dan gambar muncul di tabel.
-5. Edit product tanpa mengganti gambar.
-6. Pastikan gambar lama tetap muncul.
-7. Edit product dengan gambar baru.
-8. Pastikan gambar berubah.
-9. Delete product.
-10. Pastikan product hilang dari tabel.
+2. Tambahkan product baru dengan upload gambar valid.
+3. Pastikan product dan gambar muncul di tabel.
+4. Edit product dan upload gambar pengganti.
+5. Pastikan gambar berubah dan file baru tampil dari folder `public/images`.
+6. Delete product.
+7. Pastikan product hilang dari tabel.
 
 ## Acceptance Criteria
 
@@ -491,24 +513,25 @@ Test manual:
 - `ProductsController@index` mengirim `$products` ke `pages.admin`.
 - `admin.blade.php` tidak memakai data product statis lagi.
 - Product baru bisa disimpan ke tabel `products`.
-- Product baru wajib punya gambar.
-- Gambar product tersimpan di `storage/app/public/products`.
-- Gambar product bisa ditampilkan dari `public/storage/products`.
+- Product baru wajib punya file gambar.
+- Setelah create, kolom `image_url` berisi URL/path publik seperti `/images/product_x.jpg`.
+- Gambar product tampil dari `image_url` yang tersimpan di database.
+- File gambar tersimpan di `public/images`, bukan di `storage/app/public`.
 - Product bisa diedit.
-- Product bisa diedit tanpa upload ulang gambar.
-- Jika gambar diganti, file gambar lama dihapus dari storage.
+- Gambar product bisa diganti dengan upload file baru.
 - Product bisa dihapus.
-- Jika product dihapus, file gambarnya ikut dihapus dari storage.
 - View hanya memakai kolom yang ada di migration `products`.
 - Tidak ada penggunaan `App\Models\Products`.
+- Tidak ada penggunaan `Storage::disk`.
+- Tidak ada penggunaan `php artisan storage:link`.
 - Tidak ada penggunaan tabel `product_variants`.
 
 ## Risiko yang Perlu Diperhatikan
 
 - Jika developer memakai `size`, data tidak akan cocok karena migration saat ini memakai `Size`.
-- Jika view memakai `$product->image` sebelum kolom `image` dibuat, halaman admin bisa error.
-- Jika form upload tidak memakai `enctype="multipart/form-data"`, file gambar tidak akan terkirim ke controller.
-- Jika belum menjalankan `php artisan storage:link`, gambar tersimpan tetapi tidak bisa diakses dari browser.
+- Jika view memakai `$product->image_url` sebelum kolom `image_url` dibuat, halaman admin bisa error.
+- Jika form memakai input file, itu tidak sesuai scope karena database hanya menyimpan URL.
+- Jika URL gambar tidak bisa diakses publik, gambar tidak akan tampil di browser walaupun data tersimpan.
 - Jika view tetap memakai `category`, akan muncul kebutuhan kolom baru yang belum ada di migration.
 - Jika route `/admin` masih closure, `$products` tidak akan dikirim ke view.
 - Jika controller masih import `App\Models\Products`, Laravel akan error karena model itu tidak ada.

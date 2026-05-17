@@ -8,7 +8,8 @@
             <h2 class="font-headline-md text-headline-md text-on-surface">Manage Products</h2>
             <p class="font-body-md text-body-md text-on-surface-variant mt-1">View, edit, and manage your inventory.</p>
         </div>
-        <button class="bg-primary text-on-primary px-8 py-3 rounded hover:bg-primary-container hover:text-on-primary-container transition-colors duration-300 flex items-center gap-2 shadow-[0_4px_14px_rgba(39,19,16,0.1)]">
+        @include('modal.add')
+        <button onclick="openModal()" class="bg-primary text-on-primary px-8 py-3 rounded hover:bg-primary-container hover:text-on-primary-container transition-colors duration-300 flex items-center gap-2 shadow-[0_4px_14px_rgba(39,19,16,0.1)]">
             <span class="material-symbols-outlined text-[20px]">add</span>
             <span class="font-label-md text-label-md">Add New Product</span>
         </button>
@@ -40,7 +41,6 @@
                     <tr class="border-b border-surface-variant bg-surface-container-low/50">
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant w-16">Image</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Product Name</th>
-                        <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Category</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Stock Level</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant">Price</th>
                         <th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant text-right">Actions</th>
@@ -48,21 +48,16 @@
                 </thead>
                 <tbody class="divide-y divide-surface-variant">
                 <!-- Row 1 -->
+                @forelse ($products as $product)
                     <tr class="hover:bg-surface-container-lowest transition-colors group">
                         <td class="px-6 py-4">
-                            <img alt="Minimalist organic cotton hoodie in warm cream color, flat lay on light background" class="w-12 h-12 object-cover rounded bg-surface-variant" data-alt="Minimalist organic cotton hoodie in warm cream color, flat lay on light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWErob8xzPoznEFwpskhjQKAc6gpw70Bmj1Xe8zgLqj2qRdchZGhHYPVOZg0fxnat3rIolxGthARZ-r77s6ZWNtM9vKPOvWUi4Xz1n3co4EYcPv5FerCqcgGS005LHekY3GsPLMSTd8v_tGh7QcLGbBRIZaXyp_hv3kDalpepGzp7Jo0Q3F5olYzmn_L1bp2XEvRwFnTIZBAMkuxLn9AqVuALY2rBWTsgCd2THCU1IK9EBB8DBL1cDceuIV_u0yG4FIQGscjNxSS0"/>
+                            <img alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded bg-surface-variant" data-alt="Minimalist organic cotton hoodie in warm cream color, flat lay on light background" src="{$product->image}"/>
                         </td>
-                        <td class="px-6 py-4">
-                            <div class="font-headline-sm text-[16px] text-on-surface">The Essential Hoodie</div>
-                            <div class="font-label-sm text-label-sm text-on-surface-variant mt-1">SKU: HD-001-CR</div>
-                        </td>
-                        <td class="px-6 py-4 font-body-md text-body-md text-on-surface">Outerwear</td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-secondary-container text-on-secondary-container font-label-md text-label-md">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                            124 in stock</span>
-                        </td>
-                        <td class="px-6 py-4 font-body-md text-body-md text-on-surface">$185.00</td>
+                        <td>{{ $product->name }}</td>
+                        <td>{{ $product->Size }}</td>
+                        <td>{{ $product->stock }}</td>
+                        <td>{{ $product->reserved_stock }}</td>
+                        <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
                                 <button class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary-container/20 rounded transition-colors" title="Edit">
@@ -74,6 +69,11 @@
                             </div>
                         </td>
                     </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-on-surface-variant">No products found.</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
             </div>
