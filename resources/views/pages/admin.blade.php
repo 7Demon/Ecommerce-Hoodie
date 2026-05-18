@@ -51,17 +51,17 @@
                 <tbody class="divide-y divide-surface-variant">
                 <!-- Row 1 -->
                 @forelse ($products as $product)
-                    <tr class="hover:bg-surface-container-lowest transition-colors group">
-                        <td class="px-6 py-4">
+                    <tr class="hover:bg-surface-container-lowest transition-colors group ">
+                        <td class="px-6 py-4 align-middle">
                             <img alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded bg-surface-variant" data-alt="Minimalist organic cotton hoodie in warm cream color, flat lay on light background" src="{{ $product->image }}"/>
                         </td>
-                        <td>{{ $product->name }}</td>
-                        <td>{{ $product->size }}</td>
-                        <td>{{ $product->stock }}</td>
-                        <td>{{ $product->reserved_stock }}</td>
-                        <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end gap-2 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                        <td class="px-6 py-4 align-middle">{{ $product->name }}</td>
+                        <td class="px-6 py-4 align-middle">{{ $product->size }}</td>
+                        <td class="px-6 py-4 align-middle">{{ $product->stock }}</td>
+                        <td class="px-6 py-4 align-middle">{{ $product->reserved_stock }}</td>
+                        <td class="px-6 py-4 align-middle">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        <td class="px-6 py-4 align-middle text-right">
+                            <div class="flex items-center justify-end gap-2">
                                 <button class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary-container/20 rounded transition-colors" title="Edit">
                                     <span class="material-symbols-outlined text-[20px]">edit</span>
                                 </button>

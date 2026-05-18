@@ -15,7 +15,7 @@
 
     <!-- Memanggil komponen Navbar -->
    
-    @if (request()->routeIs('admin'))
+    @if (request()->routeIs('admin') or request()->routeIs('admin-orders'))
         <div class="flex min-h-screen">
             @include('partials.sidebar')
             <main class="flex-1 min-w-0">

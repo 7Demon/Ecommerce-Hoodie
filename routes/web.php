@@ -19,6 +19,9 @@ Route::get('/shopping-cart', function(){
 Route::get('/details', function(){
     return view('pages.productDetail');
 })->name('details');
+Route::get('/admin/orders', function(){
+    return view('pages.orders');
+})->name('admin-orders');
     
 Route::get('/admin', [ProductsController::class, 'index'])->name('admin');
 Route::post('/admin/products/add', [ProductsController::class, 'store'])->name('admin.products.store');
