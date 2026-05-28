@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Home - Estrella Boutique')
+@section('title', 'HOODIEL')
 
 @section('content')
 <main>
@@ -30,36 +30,28 @@
             <a class="font-label-caps text-label-caps border-b border-primary pb-1 text-primary" href="{{ route('collections') }}">View All</a>
         </div>
         <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-gutter">
-            <!-- Product 1 -->
-            <div class="group cursor-pointer">
-                <div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
-                    <img alt="Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A minimalist product shot of a deep chocolate brown oversized hoodie against a soft tan background. The garment is shown from a three-quarter angle to emphasize the architectural volume of the hood and the drop-shoulder seam. Natural light filters in from a side window, creating high-contrast highlight and shadow. The aesthetic is clean, modern, and aligned with high-end luxury fashion branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBG4evhmmxxBlszSPKNStWJLwEnwag51SVcU51qAiPDi4cKEiO6llHul27yVMfJRg34tdlWYr_2IcHBFwFDi5pQXpBagOr0q0NSnJkFqy49UrMnOjs7QddJogOoh2qt8CVsv5Uz2hAnfb_BCWkTs6TPsUwcxOf_HBliZ6redfpB66PXcFAcQg5XdXnd0EKejm35vtx779I-_dtt6K-GogXRA8lB6ZZ_45n2vapPVAo8p1BH-YX5KfG0rocQMXicRjobPPUHoH9oAM"/>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-h3 text-[1.25rem] mb-2 text-primary">The Archival Hoodie</h3>
-                    <p class="font-body-md text-secondary">$185.00</p>
-                </div>
-            </div>
-            <!-- Product 2 -->
-            <div class="group cursor-pointer">
-                <div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
-                    <img alt="Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A premium sand-colored neutral hoodie displayed on a ghost mannequin, creating a floating effect against a crisp white gallery background. The fabric has a visible, high-quality knit texture. The lighting is bright and even, highlighting the soft curves of the garment. The image composition is perfectly centered, reflecting an orderly and upscale boutique presentation style with a focus on tactile quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2WJNy16xh12R4OxAom9ybXcSzVJ4_Klbxn_PTLCHIl8vMC1O9cv6Ad8eRZMbDxTPexkaIgA0K4c9OkKvt8nEVgQK3axfzDeSImwlZ31bG10AWy1PbHDrC02dI8tRxn-_mVwaAsJIBrFSxCooYKy1kBskzpOZv3blAVuqEZKWPsVhQXkMMeg5VSNnZWr_YZinX8ny86ovZ_C1p2BkNIXhaOaI8aeg-uYy8SxDsvPZvwlvOokWTljD8VRQhzrvPMR1HAncupJOfjVc"/>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-h3 text-[1.25rem] mb-2 text-primary">Standard Fleece</h3>
-                    <p class="font-body-md text-secondary">$145.00</p>
-                </div>
-            </div>
-            <!-- Product 3 -->
-            <div class="group cursor-pointer">
-                <div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
-                    <img alt="Product" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A close-up artistic shot of a charcoal grey premium hoodie's texture and silver metal aglets. The hoodie is neatly folded on a dark oak wooden surface. The mood is moody and atmospheric, using low-key lighting to accentuate the premium nature of the materials. The color palette is dominated by deep greys, warm browns, and sharp highlights on metallic details, maintaining a cohesive luxury visual identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhe8_7oH441QHx7NLv-rN31953LJdIadBhE5ZwQCq8hBmTI48RJiBeFEcaF59KkhMleK4vDazeIEfBEq-ZM8xRQJACVCjgXKCHvigeh4F2Y6wLAo6Y1i0DsDm4bQbLe1X2eVcfQmCXNJKBdIyKA5tOMHmQ1y3BBwYUER8tN5WhksdaJloW6ALPcCkCrB6ySzZeQL6rQ9amgNeOvStstwo5Mes1ICzt3vgtqAl4BZTuWkHEibb-hIWsezkHIoAFzcPOycZMVbrY8Wg"/>
-                </div>
-                <div class="text-center">
-                    <h3 class="font-h3 text-[1.25rem] mb-2 text-primary">Sculptural Wrap</h3>
-                    <p class="font-body-md text-secondary">$210.00</p>
-                </div>
-            </div>
+            @php
+                $featured = \App\Models\Product::selectRaw('MIN(id) as id, name, MIN(price) as price, image, description')
+                    ->groupBy('name', 'image', 'description')
+                    ->latest('id')
+                    ->limit(3)
+                    ->get();
+            @endphp
+            @foreach($featured as $product)
+                <a href="{{ route('details', ['name' => $product->name]) }}" class="group cursor-pointer block">
+                    <div class="aspect-[3/4] mb-8 bg-surface-container-low overflow-hidden">
+                        <img
+                            alt="{{ $product->name }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                            src="{{ $product->image }}"
+                        />
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-h3 text-[1.25rem] mb-2 text-primary">{{ $product->name }}</h3>
+                        <p class="font-body-md text-secondary">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                    </div>
+                </a>
+            @endforeach
         </div>
     </section>
     <!-- Brand Story -->

@@ -91,7 +91,7 @@
             </div>
         </div>
         <!-- Summary Section -->
-        <aside class="lg:col-span-4 bg-stone-50 dark:bg-stone-900 p-10 shadow-[0_40px_40px_-15px_rgba(61,43,31,0.04)]">
+        <aside class="lg:col-span-4 bg-stone-50 p-10 shadow-[0_40px_40px_-15px_rgba(61,43,31,0.04)]">
             <h2 class="font-h3 text-h3 text-primary mb-8 border-b border-outline-variant pb-4">Order Summary</h2>
             <div class="space-y-6 mb-12">
                 <div class="flex justify-between items-center">

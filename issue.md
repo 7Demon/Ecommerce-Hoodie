@@ -51,7 +51,7 @@ Kolom tabel `products` yang sudah ada di migration:
 ```php
 name
 description
-Size
+size
 stock
 price
 reserved_stock
@@ -64,7 +64,6 @@ Catatan penting:
 - Jangan simpan file gambar ke database.
 - Jangan pakai kolom `image` di database; pakai `image_url`.
 - Jangan pakai kolom `category` di view admin sebelum kolom itu benar-benar ada di migration.
-- Kolom `Size` memakai huruf besar `S`, jadi controller dan view harus memakai key `Size` agar cocok dengan migration saat ini.
 
 ## Scope
 
@@ -121,13 +120,13 @@ Jika project masih baru dan migration belum pernah dijalankan di database lokal,
 $table->string('image_url')->nullable();
 ```
 
-Letakkan setelah `description` atau sebelum `Size`:
+Letakkan setelah `description` atau sebelum `size`:
 
 ```php
 $table->string('name');
 $table->text('description');
 $table->string('image_url')->nullable();
-$table->string('Size');
+$table->string('size');
 $table->integer('stock');
 $table->decimal('price', 8, 2);
 $table->integer('reserved_stock')->default(0);
@@ -199,7 +198,7 @@ public function store(Request $request)
         'name' => ['required', 'string', 'max:255'],
         'description' => ['required', 'string'],
         'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-        'Size' => ['required', 'string', 'max:255'],
+        'size' => ['required', 'string', 'max:255'],
         'stock' => ['required', 'integer', 'min:0'],
         'price' => ['required', 'numeric', 'min:0'],
         'reserved_stock' => ['nullable', 'integer', 'min:0'],
@@ -226,7 +225,7 @@ public function update(Request $request, Product $product)
         'name' => ['required', 'string', 'max:255'],
         'description' => ['required', 'string'],
         'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-        'Size' => ['required', 'string', 'max:255'],
+        'size' => ['required', 'string', 'max:255'],
         'stock' => ['required', 'integer', 'min:0'],
         'price' => ['required', 'numeric', 'min:0'],
         'reserved_stock' => ['nullable', 'integer', 'min:0'],
@@ -283,14 +282,13 @@ protected $fillable = [
     'name',
     'description',
     'image_url',
-    'Size',
+    'size',
     'stock',
     'price',
     'reserved_stock',
 ];
 ```
 
-Jangan ubah `Size` menjadi `size` kecuali migration juga diubah.
 
 ### 6. Ubah Route Admin
 
@@ -331,7 +329,7 @@ Bagian tabel jangan lagi memakai row statis. Gunakan loop:
             <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded">
         </td>
         <td>{{ $product->name }}</td>
-        <td>{{ $product->Size }}</td>
+        <td>{{ $product->size }}</td>
         <td>{{ $product->stock }}</td>
         <td>{{ $product->reserved_stock }}</td>
         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
@@ -351,7 +349,7 @@ Header tabel sebaiknya disesuaikan dengan migration:
 ```text
 Image
 Product Name
-Size
+size
 Stock
 Reserved Stock
 Price
@@ -375,7 +373,7 @@ Form tambah product:
     <input name="name" value="{{ old('name') }}" required>
     <textarea name="description" required>{{ old('description') }}</textarea>
     <input name="image" type="file" accept="image/jpeg,image/png,image/webp" required>
-    <input name="Size" value="{{ old('Size') }}" required>
+    <input name="size" value="{{ old('size') }}" required>
     <input name="stock" type="number" min="0" value="{{ old('stock', 0) }}" required>
     <input name="reserved_stock" type="number" min="0" value="{{ old('reserved_stock', 0) }}">
     <input name="price" type="number" min="0" step="0.01" value="{{ old('price') }}" required>
@@ -401,7 +399,7 @@ Untuk implementasi paling sederhana, buat form edit per row atau section edit ke
     <textarea name="description" required>{{ old('description', $product->description) }}</textarea>
     <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-12 h-12 object-cover rounded">
     <input name="image" type="file" accept="image/jpeg,image/png,image/webp">
-    <input name="Size" value="{{ old('Size', $product->Size) }}" required>
+    <input name="size" value="{{ old('size', $product->size) }}" required>
     <input name="stock" type="number" min="0" value="{{ old('stock', $product->stock) }}" required>
     <input name="reserved_stock" type="number" min="0" value="{{ old('reserved_stock', $product->reserved_stock) }}">
     <input name="price" type="number" min="0" step="0.01" value="{{ old('price', $product->price) }}" required>
@@ -528,7 +526,6 @@ Test manual:
 
 ## Risiko yang Perlu Diperhatikan
 
-- Jika developer memakai `size`, data tidak akan cocok karena migration saat ini memakai `Size`.
 - Jika view memakai `$product->image_url` sebelum kolom `image_url` dibuat, halaman admin bisa error.
 - Jika form memakai input file, itu tidak sesuai scope karena database hanya menyimpan URL.
 - Jika URL gambar tidak bisa diakses publik, gambar tidak akan tampil di browser walaupun data tersimpan.
