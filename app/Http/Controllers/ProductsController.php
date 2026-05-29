@@ -40,25 +40,49 @@ class ProductsController extends Controller
     /**
      * Display the public collections/shop page.
      * Products with the same name are grouped — only one card per unique name.
+     * Each grouped item carries an `images` array (all unique variant images)
+     * for the hover slideshow on the card.
      */
     public function collections(Request $request)
     {
         $sort = $request->query('sort', 'latest');
 
-        // Pick one representative row per unique product name
-        $query = Product::query()
-            ->selectRaw('MIN(id) as id, name, MIN(price) as price, image, MIN(stock) as stock, description')
-            ->groupBy('name', 'image', 'description');
+        // Fetch all products, group by name in PHP so we can collect every unique image
+        $grouped = Product::all()->groupBy('name')->map(function ($variants, $name) {
+            $first        = $variants->sortBy('id')->first();
+            $uniqueImages = $variants->pluck('image')->unique()->filter()->values()->toArray();
 
-        match ($sort) {
-            'price_asc'  => $query->orderBy('price', 'asc'),
-            'price_desc' => $query->orderBy('price', 'desc'),
-            'name_asc'   => $query->orderBy('name', 'asc'),
-            'name_desc'  => $query->orderBy('name', 'desc'),
-            default      => $query->orderBy('id', 'desc'),
+            return (object) [
+                'name'        => $name,
+                'price'       => $variants->min('price'),
+                'image'       => $first->image,
+                'images'      => $uniqueImages,
+                'description' => $first->description,
+                'stock'       => $variants->sum('stock'),
+                'id'          => $first->id,
+            ];
+        });
+
+        // Sorting
+        $grouped = match ($sort) {
+            'price_asc'  => $grouped->sortBy('price')->values(),
+            'price_desc' => $grouped->sortByDesc('price')->values(),
+            'name_asc'   => $grouped->sortBy('name')->values(),
+            'name_desc'  => $grouped->sortByDesc('name')->values(),
+            default      => $grouped->sortByDesc('id')->values(),
         };
 
-        $products = $query->paginate(12);
+        // Manual pagination
+        $page    = max(1, (int) $request->input('page', 1));
+        $perPage = 12;
+        $products = new \Illuminate\Pagination\LengthAwarePaginator(
+            $grouped->slice(($page - 1) * $perPage, $perPage)->values(),
+            $grouped->count(),
+            $perPage,
+            $page,
+            ['path' => route('collections')]
+        );
+
         return view('pages.collections', compact('products', 'sort'));
     }
 

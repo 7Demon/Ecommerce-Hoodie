@@ -110,11 +110,15 @@
                     <p id="stockBadge" class="font-label-sm text-label-sm text-green-700">In stock</p>
                 </div>
 
-                {{-- Add to Cart --}}
-                <div class="flex flex-col gap-3">
-                    <input type="hidden" id="selectedSizeInput" value="{{ $variants->first()->size }}">
-                    <input type="hidden" id="selectedColorInput" value="{{ $colors->first() }}">
+                {{-- Add to Cart Form --}}
+                <form method="POST" action="{{ route('cart.add') }}" class="flex flex-col gap-3">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="qty" value="1">
+                    <input type="hidden" name="size" id="selectedSizeInput" value="{{ $variants->first()->size }}">
+                    <input type="hidden" name="color" id="selectedColorInput" value="{{ $colors->first() }}">
                     <button
+                        type="submit"
                         id="addToCartBtn"
                         class="w-full py-4 px-8 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:opacity-90 active:scale-[0.98] transition-all flex justify-center items-center gap-2"
                     >
@@ -124,7 +128,7 @@
                     <p class="font-body-md text-body-md text-center text-on-surface-variant text-sm">
                         Free shipping and returns on all domestic orders.
                     </p>
-                </div>
+                </form>
 
                 {{-- Accordion --}}
                 <div class="border-t border-outline-variant pt-6 flex flex-col divide-y divide-outline-variant/50">
@@ -201,12 +205,13 @@
         variants.forEach((v, i) => {
             const avail = (v.stock || 0) - (v.reserved_stock || 0);
             const btn   = document.createElement('button');
-            btn.type        = 'button';
-            btn.dataset.size     = v.size;
-            btn.dataset.price    = v.price;
-            btn.dataset.stock    = v.stock;
-            btn.dataset.reserved = v.reserved_stock;
-            btn.dataset.image    = v.image;
+            btn.type             = 'button';
+            btn.dataset.size      = v.size;
+            btn.dataset.price     = v.price;
+            btn.dataset.stock     = v.stock;
+            btn.dataset.reserved  = v.reserved_stock;
+            btn.dataset.image     = v.image;
+            btn.dataset.variantId = v.id;
             btn.onclick = function() { selectSize(this); };
 
             btn.className = [
@@ -271,6 +276,11 @@
 
         document.getElementById('selectedSizeLabel').textContent = size;
         document.getElementById('selectedSizeInput').value = size;
+
+        // Update hidden product_id to match the exact variant row
+        if (btn.dataset.variantId) {
+            document.querySelector('input[name="product_id"]').value = btn.dataset.variantId;
+        }
 
         // Update main image if variant has its own image
         if (btn.dataset.image) {

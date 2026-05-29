@@ -7,8 +7,14 @@
             <a class="{{ request()->routeIs('about') ? 'border-b border-stone-900 text-stone-900' : 'text-stone-500 hover:text-stone-900' }} pb-1 transition-colors duration-300" href="{{ route('about') }}">About</a>
         </div>
         <div class="flex items-center gap-2 text-stone-900 md:gap-5">
-            <a aria-label="Shopping cart" class="flex min-h-11 min-w-11 items-center justify-center transition-opacity duration-300 hover:opacity-80" href="{{ route('shopping-cart') }}">
+            @php $cartCount = app(\App\Services\CartService::class)->count(); @endphp
+            <a aria-label="Shopping cart" class="relative flex min-h-11 min-w-11 items-center justify-center transition-opacity duration-300 hover:opacity-80" href="{{ route('shopping-cart') }}">
                 <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                @if($cartCount > 0)
+                    <span class="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
+                        {{ $cartCount }}
+                    </span>
+                @endif
             </a>
 
             {{-- Profile Icon --}}

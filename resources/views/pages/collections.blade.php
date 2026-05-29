@@ -85,12 +85,16 @@
             @else
                 <div class="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-gutter xl:gap-y-16">
                     @foreach($products as $product)
-                        <div class="group">
+                        @php
+                            $images = $product->images ?? [$product->image];
+                            $hasMultiple = count($images) > 1;
+                        @endphp
+                        <div class="group product-card" data-images='@json($images)'>
                             <a href="{{ route('details', ['name' => $product->name]) }}" class="block">
                                 <div class="aspect-[3/4] overflow-hidden bg-white mb-6 relative">
                                     <img
                                         alt="{{ $product->name }}"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                        class="product-card-img w-full h-full object-cover group-hover:scale-105 transition-all duration-700 ease-out"
                                         loading="lazy"
                                         src="{{ $product->image }}"
                                     />
@@ -101,11 +105,21 @@
                                     @else
                                         <button
                                             aria-label="View {{ $product->name }}"
-                                            class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
+                                            class="absolute bottom-4 right-4 bg-primary text-white p-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"
                                             type="button"
                                             onclick="window.location='{{ route('details', ['name' => $product->name]) }}'">
                                             <span class="material-symbols-outlined">arrow_forward</span>
                                         </button>
+                                    @endif
+
+                                    {{-- Dot indicators for multi-image cards --}}
+                                    @if($hasMultiple)
+                                    <div class="slideshow-dots absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        @foreach($images as $i => $img)
+                                            <span class="dot w-2 h-2 rounded-full transition-all duration-300 shadow-sm
+                                                {{ $i === 0 ? 'bg-primary scale-110' : 'bg-white/60' }}"></span>
+                                        @endforeach
+                                    </div>
                                     @endif
                                 </div>
                                 <div class="text-center">
@@ -125,4 +139,84 @@
         </div>
     </div>
 </main>
+
+@push('scripts')
+<script>
+    // ─── Product Card Hover Slideshow ────────────────────────────────────────
+    const slideshowTimers = new Map();
+
+    function initSlideshows() {
+        document.querySelectorAll('.product-card').forEach(card => {
+            const images = JSON.parse(card.dataset.images || '[]');
+            if (images.length <= 1) return;
+
+            card.addEventListener('mouseenter', () => startSlideshow(card, images));
+            card.addEventListener('mouseleave', () => stopSlideshow(card, images));
+        });
+    }
+
+    function startSlideshow(card, images) {
+        if (slideshowTimers.has(card)) return; // already running
+
+        let currentIndex = 0;
+        const img  = card.querySelector('.product-card-img');
+        const dots = card.querySelectorAll('.dot');
+
+        const timer = setInterval(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+
+            // Fade out → swap → fade in
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = images[currentIndex];
+                img.style.opacity = '1';
+            }, 250);
+
+            // Update dots
+            dots.forEach((d, i) => {
+                if (i === currentIndex) {
+                    d.classList.add('bg-primary', 'scale-110');
+                    d.classList.remove('bg-white/60');
+                } else {
+                    d.classList.remove('bg-primary', 'scale-110');
+                    d.classList.add('bg-white/60');
+                }
+            });
+        }, 1500);
+
+        slideshowTimers.set(card, timer);
+    }
+
+    function stopSlideshow(card, images) {
+        const timer = slideshowTimers.get(card);
+        if (!timer) return;
+
+        clearInterval(timer);
+        slideshowTimers.delete(card);
+
+        const img  = card.querySelector('.product-card-img');
+        const dots = card.querySelectorAll('.dot');
+
+        // Reset to first image
+        img.style.opacity = '0';
+        setTimeout(() => {
+            img.src = images[0];
+            img.style.opacity = '1';
+        }, 200);
+
+        // Reset dots
+        dots.forEach((d, i) => {
+            if (i === 0) {
+                d.classList.add('bg-primary', 'scale-110');
+                d.classList.remove('bg-white/60');
+            } else {
+                d.classList.remove('bg-primary', 'scale-110');
+                d.classList.add('bg-white/60');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initSlideshows);
+</script>
+@endpush
 @endsection
