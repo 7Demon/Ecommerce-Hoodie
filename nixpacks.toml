@@ -16,16 +16,15 @@ nixPkgs = [
 [phases.install]
 cmds = [
   "composer install --no-dev --optimize-autoloader --no-interaction",
-  "npm ci",
-  "npm run build"
+  "npm ci"
 ]
 
 [phases.build]
 cmds = [
+  "npm run build",
   "php artisan config:cache",
-  "php artisan route:cache",
-  "php artisan view:cache"
+  "php artisan route:cache"
 ]
 
 [start]
-cmd = "php artisan migrate --force && php -S 0.0.0.0:$PORT -t public"
+cmd = "php artisan migrate --force && php artisan storage:link --force && php -S 0.0.0.0:$PORT -t public"
