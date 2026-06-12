@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import 'material-symbols/outlined.css';
+
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -124,7 +124,11 @@
         'FILL' 0,
         'wght' 400,
         'GRAD' 0,
-        'opsz' 48
+        'opsz' 48;
+    display: inline-block;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
 }
 
 /* Hide browser native password reveal button (Edge, Chrome) */
