@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $product->name . ' — Estrella Boutique')
+@section('title', $product->name . ' — HOODIEL')
 
 @section('content')
 <main class="w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-12 pt-24 sm:pt-28 lg:pt-32 pb-16 sm:pb-20 lg:pb-28">

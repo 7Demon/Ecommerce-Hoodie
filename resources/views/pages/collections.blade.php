@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Collections — Estrella Boutique')
+@section('title', 'Collections — HOODIEL')
 
 @section('content')
 <!-- Main Content Canvas -->
